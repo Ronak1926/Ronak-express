@@ -19,8 +19,12 @@ router.get("/api/users",
      .isLength({ min: 3, max: 10 })
      .withMessage("Must be at least 3-10 characters")
      , (request, response) => {
-    console.log(request.session);
-    console.log(request.session.id);
+
+        console.log('the session object at /api/users is:')
+        console.log(request.session);
+        console.log('the session id at /api/users is :')
+        console.log(request.session.id)
+
     request.sessionStore.get(request.session.id, (err, sessionData)=>{
         if (err) {
             console.log(err);
