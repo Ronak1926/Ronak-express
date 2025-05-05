@@ -47,3 +47,4 @@ npm install express-session connect-mongo
 npm install passport passport-local
 npm install bcrypt
 npm install cookie-parser
+npm install passport passport-local
