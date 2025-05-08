@@ -6,10 +6,11 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import { mockUser } from './utils/constants.js';
 import passport from "passport";
-// import './strategies/local-stategy.js'; // import the local strategy
+import './strategies/local-stategy.js'; // import the local strategy
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
-import './strategies/discord-strategy.js';
+
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -37,7 +38,7 @@ app.use(session({
 );
 
 app.use(passport.initialize());
-app.use(passport.session()); 
+app.use(passport.session());
 
 app.use(routes);
 
@@ -65,17 +66,6 @@ app.post('/api/auth/logout', (request, response) => {
     })
 })
 
-app.get('/api/auth/discord', passport.authenticate('discord'),(request, response) =>{
-    conosle.log('calling the api/auth/discord endpoint')
-});
-
-app.get('/api/auth/discord/redirect', passport.authenticate('discord'), (request, response) => {
-    response.sendStatus(200);
-    console.log('inside the /api/auth/discord/redirect endpoint')
-    console.log(request.session)
-    console.log(request.user)
-});
-
 app.get('/', (request, response) => {
     console.log(request.session);
     console.log(request.session.id)
@@ -88,14 +78,3 @@ app.get('/', (request, response) => {
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
-
-// client id : 1369646721185091646
-// client secret : CAh0dZRt_kXDp2B0aCK_4HD9Rdq6sVtD
-// redirect url : localhost:3000/api/auth/discord/redirect
-
-
-/* 
-
- flow of the code : first when user visit the /api/auth/discord endpoint, then it will call the this passport.authenticate('discord')middleware , that takes to the discord page where user will be authorized and then it will serialize user where we will get the user id and username and avatar of the user. then it will call the deserialize user where we will find the user in the database and if not found then we will create a new user and save it to the database. then it will call the /api/auth/discord/redirect endpoint where we will get the user information and send it to the client. then we can use this information to show the user in our application.
-*/
